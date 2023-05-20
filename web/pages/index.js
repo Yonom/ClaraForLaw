@@ -1,6 +1,6 @@
 import voiceBot from "@/services/voiceBot";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
 
 import Scene from "../components/Scene";
@@ -9,48 +9,53 @@ import { makeSpeech } from "../services/makeSpeech";
 
 export default function Home() {
   const [takePhoto, setTakePhoto] = useState(false);
+  const [showDIY, setShowDIY] = useState(false);
+  const [showLegalHelp, setShowLegalHelp] = useState(false);
   const [subtitle, setSubtitle] = useState("");
   const [userInput, setUserInput] = useState("");
   const [blendData, setBlendData] = useState();
 
   const [started, setStarted] = useState(false);
-  const [recorder] = useState(() =>
-    typeof window === "undefined"
-      ? null
-      : voiceBot({
-          onInput: (t) => setUserInput(t),
-          onAiReply: async ({ text: t, takePhoto }) => {
-            setUserInput("");
-            setSubtitle(t);
-            setTakePhoto(takePhoto);
 
-            if (t) {
-              await new Promise(async (resolve) => {
-                const response = await makeSpeech(t);
-                const { blendData, audioData } = response.data;
+  const recorderRef = useRef();
+  useEffect(() => {
+    if (recorderRef.current) return;
+    recorderRef.current = voiceBot({
+      onInput: (t) => setUserInput(t),
+      onAiReply: async ({ text: t, takePhoto, showDIY, showLegalHelp }) => {
+        setUserInput("");
+        setSubtitle(t);
+        setTakePhoto(takePhoto);
+        setShowDIY(showDIY);
+        setShowLegalHelp(showLegalHelp);
 
-                if (blendData.length) {
-                  setBlendData(blendData);
-                }
+        if (t) {
+          await new Promise(async (resolve) => {
+            const response = await makeSpeech(t);
+            const { blendData, audioData } = response.data;
 
-                if (audioData) {
-                  await playAudioData(audioData, resolve);
-                } else {
-                  resolve();
-                }
-              });
+            if (blendData.length) {
+              setBlendData(blendData);
             }
-          },
-        })
-  );
+
+            if (audioData) {
+              await playAudioData(audioData, resolve);
+            } else {
+              resolve();
+            }
+          });
+        }
+      },
+    });
+  }, []);
 
   const handleTakePhoto = () => {
-    recorder.onTakePhoto();
+    recorderRef.current.onTakePhoto();
   };
 
   const start = async () => {
     setStarted(true);
-    recorder.startRecording();
+    recorderRef.current.startRecording();
   };
 
   const { progress } = useProgress();
@@ -80,7 +85,7 @@ export default function Home() {
             {userInput || subtitle}
           </div>
         )}
-        {(takePhoto || true) && (
+        {takePhoto && (
           <div
             style={{
               position: "absolute",
@@ -115,7 +120,7 @@ export default function Home() {
                   cursor: "pointer",
                   backgroundColor: "#fff3",
                 }}
-                for="img"
+                htmlFor="img"
               >
                 Take photo
               </label>

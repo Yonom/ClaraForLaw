@@ -18,27 +18,29 @@ const voiceBot = ({ onAiReply, onInput }) => {
         text: input,
       });
       await onAiReply(reply);
+
+      if (reply.isEnd) {
+        await new Promise(() => {});
+      }
       if (reply.takePhoto) {
         await new Promise((r) => {
           takePhotoCallback = async () => {
-            const replyTask = onAiReply({
-              text: "Uploading...",
-            });
-
             // TODO upload the actual file in the future
-            const reply = await aiReply({
+            const replyTask = aiReply({
               sessionId: (await session).sessionId,
               text: "<File>",
             });
 
-            await replyTask;
+            await onAiReply({
+              text: "Uploading...",
+            });
+
             await new Promise((r) => setTimeout(r, 2000));
             await onAiReply({
               text: "Upload complete. Thank you. I need a moment to look over your documents. Please wait...",
             });
-            await new Promise((r) => setTimeout(r, 6000));
 
-            await onAiReply(reply);
+            await onAiReply(await replyTask);
             r();
           };
         });
