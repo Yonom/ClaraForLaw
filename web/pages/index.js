@@ -85,6 +85,88 @@ export default function Home() {
             {userInput || subtitle}
           </div>
         )}
+
+        {showLegalHelp && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: 120,
+              left: 0,
+              right: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: 24,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#000d",
+                padding: 25,
+              }}
+            >
+              <a
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  backgroundColor: "#fff3",
+                }}
+                href="https://evictiondefense.org/"
+              >
+                Visit evictiondefense.org
+              </a>
+            </div>
+          </div>
+        )}
+
+        {showDIY && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: 120,
+              left: 0,
+              right: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: 24,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#000d",
+                padding: 25,
+              }}
+            >
+              <a
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  backgroundColor: "#fff3",
+                }}
+                href="/docs/UD105.pdf"
+                target="_blank"
+              >
+                Download documents
+              </a>
+              <a
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  backgroundColor: "#fff3",
+                }}
+                href="https://selfhelp.courts.ca.gov/eviction-tenant"
+                target="_blank"
+              >
+                View Instructions
+              </a>
+            </div>
+          </div>
+        )}
         {takePhoto && (
           <div
             style={{
