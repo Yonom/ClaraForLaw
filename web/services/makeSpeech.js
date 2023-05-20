@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export function makeSpeech(lang, text) {
-  return axios.post("/api/getSpeech", { lang, text });
+export function makeSpeech(text) {
+  return axios.post("/api/textToSpeech", { text });
 }

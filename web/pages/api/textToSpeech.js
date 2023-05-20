@@ -68,18 +68,10 @@ let SSML = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml
 const key = process.env.AZURE_API_KEY;
 const region = process.env.AZURE_REGION;
 
-const voiceNames = {
-  "en-US": "en-US-JennyNeural",
-  "de-DE": "de-DE-ElkeNeural",
-  "fr-FR": "fr-FR-BrigitteNeural",
-  "es-ES": "es-ES-AbrilNeural",
-  "zh-CN": "zh-CN-XiaoxiaoNeural",
-};
-
-const textToSpeech = async (lang, text) => {
+const textToSpeech = async (text) => {
   // convert callback function to promise
   return new Promise((resolve, reject) => {
-    let ssml = SSML.replace("__VOICE__", voiceNames[lang]).replace(
+    let ssml = SSML.replace("__VOICE__", "en-US-JennyNeural").replace(
       "__TEXT__",
       text
     );
@@ -139,8 +131,8 @@ const textToSpeech = async (lang, text) => {
 };
 
 const handler = async (req, res) => {
-  const { lang, text } = req.body;
-  const api = await textToSpeech(lang, text);
+  const { text } = req.body;
+  const api = await textToSpeech(text);
   res.json(api);
 };
 

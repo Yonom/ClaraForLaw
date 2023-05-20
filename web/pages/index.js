@@ -1,10 +1,9 @@
-import voiceBot, { languages } from "@/services/voiceBot";
+import voiceBot from "@/services/voiceBot";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useProgress } from "@react-three/drei";
 
 import Scene from "../components/Scene";
-import { useRouter } from "next/router";
 import playAudioData from "../services/playAudioData";
 import { makeSpeech } from "../services/makeSpeech";
 
@@ -14,60 +13,45 @@ export default function Home() {
   const [blendData, setBlendData] = useState();
 
   const [started, setStarted] = useState(false);
-  const router = useRouter();
+  const [recorder] = useState(() =>
+    typeof window === "undefined"
+      ? null
+      : voiceBot({
+          onInput: (t) => setUserInput(t),
+          onSpeak: async (t) => {
+            setUserInput("");
+            setSubtitle(t);
 
-  const start = async (lang) => {
-    // Safari requires audio api to be immediately accessed during an interaction
-    // calling play unlocks audio api for the current session
-    new Audio(
-      "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
-    ).play();
+            if (t) {
+              await new Promise(async (resolve) => {
+                const response = await makeSpeech(t);
+                const { blendData, audioData } = response.data;
 
+                if (blendData.length) {
+                  setBlendData(blendData);
+                }
+
+                if (audioData) {
+                  await playAudioData(audioData, resolve);
+                } else {
+                  resolve();
+                }
+              });
+            }
+          },
+        })
+  );
+  const start = async () => {
     setStarted(true);
-    voiceBot({
-      messageOverride: router.query.message,
-      promptOverride: router.query.prompt,
-      lang,
-      onInput: (msg) => {
-        setUserInput(msg);
-      },
-      onSpeak: async (msg) => {
-        if (msg === subtitle) return;
-        setUserInput("");
-        setSubtitle(msg);
-
-        if (msg) {
-          await new Promise(async (resolve) => {
-            const response = await makeSpeech(lang, msg);
-            const { blendData, audioData } = response.data;
-
-            if (blendData.length) {
-              setBlendData(blendData);
-            }
-
-            if (audioData) {
-              await playAudioData(audioData, resolve);
-            } else {
-              resolve();
-            }
-          });
-        }
-      },
-    });
+    recorder.startRecording();
   };
-
-  useEffect(() => {
-    if (router.query.lang) {
-      start(router.query.lang);
-    }
-  }, [router.query.lang]);
 
   const { progress } = useProgress();
 
   return (
     <>
       <Head>
-        <title>New Bets</title>
+        <title>LLM x Law Hackathon</title>
       </Head>
       <main>
         <Scene blendData={blendData} />
@@ -106,7 +90,7 @@ export default function Home() {
               fontSize: 24,
             }}
           >
-            <p>Please select a language</p>
+            <p>Press start to begin</p>
             <div
               style={{
                 display: "flex",
@@ -114,28 +98,20 @@ export default function Home() {
                 justifyContent: "center",
               }}
             >
-              {Object.entries(languages).map(([lang, name]) => (
-                <div
-                  key={lang}
-                  style={{
-                    padding: 10,
-                    cursor: "pointer",
-                    backgroundColor: "#fff3",
-                    marginLeft: 5,
-                    marginRight: 5,
-                    marginBottom: 10,
-                  }}
-                  onClick={() => start(lang)}
-                >
-                  {name}
-                </div>
-              ))}
+              <div
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  backgroundColor: "#fff3",
+                  marginLeft: 5,
+                  marginRight: 5,
+                  marginBottom: 10,
+                }}
+                onClick={start}
+              >
+                Start
+              </div>
             </div>
-            <p style={{ fontSize: 16, marginTop: 5 }}>
-              Avatar animations are only supported for English and Mandarin.{" "}
-              <br />
-              To get the full experience, please use one of these languages.
-            </p>
           </div>
         )}
       </main>

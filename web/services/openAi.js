@@ -1,5 +1,5 @@
 export const gptCompletion = async (request) => {
-  const query = await fetch("/api/getResponse", {
+  const query = await fetch("http://localhost:8000/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -7,12 +7,6 @@ export const gptCompletion = async (request) => {
     body: JSON.stringify(request),
   });
 
-  const {
-    choices: [
-      {
-        message: { content },
-      },
-    ] = [{ message: { content: "" } }],
-  } = await query.json();
-  return content;
+  const { text } = await query.json();
+  return text;
 };
