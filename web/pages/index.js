@@ -8,6 +8,7 @@ import playAudioData from "../services/playAudioData";
 import { makeSpeech } from "../services/makeSpeech";
 
 export default function Home() {
+  const [takePhoto, setTakePhoto] = useState(false);
   const [subtitle, setSubtitle] = useState("");
   const [userInput, setUserInput] = useState("");
   const [blendData, setBlendData] = useState();
@@ -18,9 +19,10 @@ export default function Home() {
       ? null
       : voiceBot({
           onInput: (t) => setUserInput(t),
-          onSpeak: async (t) => {
+          onAiReply: async ({ text: t, takePhoto }) => {
             setUserInput("");
             setSubtitle(t);
+            setTakePhoto(takePhoto);
 
             if (t) {
               await new Promise(async (resolve) => {
@@ -41,6 +43,11 @@ export default function Home() {
           },
         })
   );
+
+  const handleTakePhoto = () => {
+    recorder.onTakePhoto();
+  };
+
   const start = async () => {
     setStarted(true);
     recorder.startRecording();
@@ -71,6 +78,48 @@ export default function Home() {
             }}
           >
             {userInput || subtitle}
+          </div>
+        )}
+        {(takePhoto || true) && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: 120,
+              left: 0,
+              right: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: 24,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#000d",
+                padding: 25,
+              }}
+            >
+              <input
+                type="file"
+                id="img"
+                name="img"
+                accept="image/*"
+                hidden
+                onChange={handleTakePhoto}
+              ></input>
+              <label
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  backgroundColor: "#fff3",
+                }}
+                for="img"
+              >
+                Take photo
+              </label>
+            </div>
           </div>
         )}
         {!started && progress === 100 && (
