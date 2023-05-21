@@ -3,7 +3,7 @@ import { assemblyAiListener } from "./assemblyAi";
 import axios from "axios";
 
 const startSession = async () => {
-  const { data } = await axios.post("http://localhost:8000/startSession");
+  const { data } = await axios.post("https://2ce7-68-65-169-185.ngrok-free.app/startSession");
   return data;
 };
 
