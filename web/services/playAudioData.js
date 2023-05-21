@@ -8,7 +8,7 @@ globalThis.playAudioData =
       await audio.play();
     } catch (ex) {
       onEnded?.();
-      throw ex;
+      // throw ex;
     }
   });
 

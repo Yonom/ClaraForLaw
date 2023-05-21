@@ -76,7 +76,7 @@ export default function Home() {
               left: 20,
               right: 20,
               textAlign: "center",
-              fontSize: 40,
+              fontSize: 22,
               color: userInput ? "blue" : "black",
               backgroundColor: "#fffa",
               padding: 10,
