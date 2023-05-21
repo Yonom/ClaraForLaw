@@ -90,7 +90,7 @@ export default function Home() {
           <div
             style={{
               position: "absolute",
-              bottom: 180,
+              top: 50,
               left: 0,
               right: 0,
               display: "flex",
@@ -119,15 +119,16 @@ export default function Home() {
               >
                 Visit evictiondefense.org
               </a>
+              
             </div>
           </div>
         )}
 
-        {!showDIY && (
+        {showDIY && (
           <div
             style={{
               position: "absolute",
-              bottom: 180,
+              top: 50,
               left: 0,
               right: 0,
               display: "flex",
@@ -142,6 +143,7 @@ export default function Home() {
               style={{
                 backgroundColor: "#000d",
                 padding: 25,
+                textAlign:"center"
               }}
             >
               <a
@@ -151,13 +153,14 @@ export default function Home() {
                   padding: 10,
                   cursor: "pointer",
                   backgroundColor: "#fff3",
-marginRight: 5,
                 }}
                 href="/docs/UD105.pdf"
                 target="_blank"
               >
                 Download documents
               </a>
+              <br />
+              <br />
               <a
                 style={{
                   color: "inherit",
@@ -165,7 +168,6 @@ marginRight: 5,
                   padding: 10,
                   cursor: "pointer",
                   backgroundColor: "#fff3",
-                  marginLeft: 5,
                 }}
                 href="https://selfhelp.courts.ca.gov/eviction-tenant"
                 target="_blank"
@@ -179,7 +181,7 @@ marginRight: 5,
           <div
             style={{
               position: "absolute",
-              bottom: 120,
+              top: 50,
               left: 0,
               right: 0,
               display: "flex",

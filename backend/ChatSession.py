@@ -46,12 +46,13 @@ class ChatSession:
             "Sorry to hear that! Can you show me the letter you received?",
             takePhoto=True,
         )
-        user_next_action = await self.io.user_input()
-        await classify_document(user_next_action)
+        file = await self.io.user_input()
+        file_contents = await ocr_file(file)
+        await classify_document(file_contents)
 
         # provide user with instructions
         await self.io.ai_reply(
-            "You must act quickly. You have 5 days to file an answer form. Do you want to do it yourself or get legal help?",
+            "You have 5 days to file an answer form. Do you want to do it yourself or get legal help?",
         )
         user_next_action = await self.io.user_input()
         choice = await classify_next_steps(user_next_action)
