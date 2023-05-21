@@ -19,13 +19,16 @@ class ChatIO:
             self.user_input_waiter = get_running_loop().create_future()
         return await self.user_input_waiter
 
-    async def ai_reply(self, text, takePhoto=False, showDIY=False, showLegalHelp=False, isEnd=False):
+    async def ai_reply(
+        self, text, takePhoto=False, showDIY=False, showLegalHelp=False, isEnd=False
+    ):
         self.ai_input_waiter.set_result(
             {
                 "text": text,
                 "takePhoto": takePhoto,
                 "showDIY": showDIY,
                 "showLegalHelp": showLegalHelp,
+                "isEnd": isEnd,
             }
         )
 

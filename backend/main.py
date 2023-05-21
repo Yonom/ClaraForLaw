@@ -51,9 +51,9 @@ async def read_root(input: ChatParams):
     return await io.on_user_input_and_return_reply(input.text)
 
 
-async def run_agent():
+async def server():
     # create a server
     await uvicorn.Server(config=uvicorn.Config(app)).serve()
 
 
-recipe.main(run_agent)
+recipe.main(server)

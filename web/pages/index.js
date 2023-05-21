@@ -90,7 +90,7 @@ export default function Home() {
           <div
             style={{
               position: "absolute",
-              bottom: 120,
+              bottom: 180,
               left: 0,
               right: 0,
               display: "flex",
@@ -109,6 +109,8 @@ export default function Home() {
             >
               <a
                 style={{
+                  color: "inherit",
+                  textDecoration: "none",
                   padding: 10,
                   cursor: "pointer",
                   backgroundColor: "#fff3",
@@ -121,11 +123,11 @@ export default function Home() {
           </div>
         )}
 
-        {showDIY && (
+        {!showDIY && (
           <div
             style={{
               position: "absolute",
-              bottom: 120,
+              bottom: 180,
               left: 0,
               right: 0,
               display: "flex",
@@ -144,9 +146,12 @@ export default function Home() {
             >
               <a
                 style={{
+                  color: "inherit",
+                  textDecoration: "none",
                   padding: 10,
                   cursor: "pointer",
                   backgroundColor: "#fff3",
+marginRight: 5,
                 }}
                 href="/docs/UD105.pdf"
                 target="_blank"
@@ -155,9 +160,12 @@ export default function Home() {
               </a>
               <a
                 style={{
+                  color: "inherit",
+                  textDecoration: "none",
                   padding: 10,
                   cursor: "pointer",
                   backgroundColor: "#fff3",
+                  marginLeft: 5,
                 }}
                 href="https://selfhelp.courts.ca.gov/eviction-tenant"
                 target="_blank"

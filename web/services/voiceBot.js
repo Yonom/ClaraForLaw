@@ -35,9 +35,8 @@ const voiceBot = ({ onAiReply, onInput }) => {
               text: "Uploading...",
             });
 
-            await new Promise((r) => setTimeout(r, 2000));
             await onAiReply({
-              text: "Upload complete. Thank you. I need a moment to look over your documents. Please wait...",
+              text: "Thank you. I need a moment to look over your documents.",
             });
 
             await onAiReply(await replyTask);
