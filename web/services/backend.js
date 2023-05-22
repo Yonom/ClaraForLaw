@@ -1,5 +1,5 @@
 export const aiReply = async (request) => {
-  const query = await fetch("https://dfb9-68-65-169-186.ngrok-free.app/chat", {
+  const query = await fetch("http://localhost:8000/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
